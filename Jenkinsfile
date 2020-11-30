@@ -9,13 +9,13 @@ pipeline {
 
     stage('Test') {
       steps {
-        echo 'testing'
+        sh 'mvn test'
       }
     }
 
     stage('Deliver') {
       steps {
-        echo 'deliver'
+        echo 'Deliver'
       }
     }
 
