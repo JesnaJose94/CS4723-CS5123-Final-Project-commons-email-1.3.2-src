@@ -16,6 +16,7 @@ pipeline {
       }
       steps {
         sh 'mvn test'
+        echo 'Test involve the test cases for Email attachment and Multipart Email classes'
       }
     }
 
