@@ -43,20 +43,54 @@ public class MultiPartEmailTest {
 	 
 	 @Rule
 	 public TemporaryFolder testFolder = new TemporaryFolder();
+	 
 	 @Before
 	 public void setUp() throws MessagingException {
 		testMpEmail = new MultiPartEmail();
 		testEmail = new SimpleEmail();
 		}
 	 @Test
+	 public void TestattachFile() throws Exception {
+		System.out.println("lgy__");
+		System.out.println("Class Name: MultiPartEmailTest");
+		System.out.println("This is the test for attach(File) method.");
+		File createdFile = testFolder.newFile("myfile.txt");
+		testMpEmail.attach(createdFile);
+			
+	 }
+	 @Test
+	 public void testsetsubType() throws Exception {
+		
+		System.out.println("This is the test for setSubType() method.");
+		testMpEmail.setSubType("hello");
+		assertEquals("hello", testMpEmail.getSubType().toString());
+	 }
+	 
+	 @Test 
+	 public void testBoolean() throws Exception {	
+		 System.out.println("This is the test for setBoolHasAttachment() method.");
+			testMpEmail.setBoolHasAttachments(true);
+			assertEquals(true, testMpEmail.isBoolHasAttachments());
+		 }
+	 
+	 @Test
+	 public void testInitialized() throws Exception {
+		 System.out.println("This is the test for setInitialized() method.");
+		 testMpEmail.setInitialized(true);
+		 assertEquals(true, testMpEmail.isInitialized());
+		 
+	 }
+	 @Test
 	 public void testattach() throws Exception {	
-		 	URL myURL = new URL("http://example.com/");
-			testMpEmail.attach(myURL,"test1","test2","test3");
-			testMpEmail.attach(myURL,"test1","test2");
+		 System.out.println("This is the test for attach(URL,string,string,string) method.");
+		 URL myURL = new URL("http://example.com/");
+		 testMpEmail.attach(myURL,"test1","test2","test3");
+		 testMpEmail.attach(myURL,"test1","test2");
 	 }
 	 
 	 @Test
 	 public void testattachemail() throws Exception {	
+		 System.out.println("This is the test for attach(EmailAttachment) method.");
 		 EmailAttachment testAttachment = new EmailAttachment();
 		 	testAttachment.setName("photo.jpg");
 		 	testAttachment.setDescription("This is a test attachment");
@@ -69,32 +103,30 @@ public class MultiPartEmailTest {
 	 
 	 @Test
 	 public void testattachnull() throws Exception {
-			 	URL myURL = new URL("http://example.com/");
-			 	testMpEmail.attach(myURL,null,null);
-			 	testMpEmail.attach(myURL,null,null,null);
+		 
+		 try {
+			 System.out.println("This is the test for attach() method with null.");
+			 EmailAttachment testAttachment = null;
+			 testMpEmail.attach(testAttachment);
+			 fail("EmailException was expected to occur");
+		 }catch (EmailException e) {
+		 	 assertEquals("Invalid attachment supplied",e.getMessage());
+		 }
 	 }
-	 @Test
-	 public void TestattachFile() throws Exception {	
-			File createdFile = testFolder.newFile("myfile.txt");
-			testMpEmail.attach(createdFile);
-	 }
-	 @Test
-	 public void testsetsubType() throws Exception {	
-		testMpEmail.setSubType("hello");
-		assertEquals("hello", testMpEmail.getSubType().toString());
-	 }
+	 
 	 @Test
 	 public void testBuildMimeMessage() {
+		 System.out.println("This is the test for buildMimeMessage() method with null.");
 		 try {
 			testMpEmail.buildMimeMessage();
 		} catch (EmailException e) {
-			assertEquals(e.getMessage(), e.getMessage());
+			assertEquals("Cannot find valid hostname for mail session", e.getMessage());
 		}
 	 } 
 	 
-			
 	 @Test
 	 public void testBuildMimeMessageValid() throws Exception {
+		    System.out.println("This is the test for BuildMimeMessage() method with valid inputs.");
 			testEmail.setHostName("testhostname");
 			testEmail.setFrom("a@b.com");
 			testEmail.addTo("c@b.com");
@@ -107,10 +139,7 @@ public class MultiPartEmailTest {
 			
 			URL myURL = new URL("http://example.com/");
 			testMpEmail.attach(myURL,"test1","test2","test3");
-		
 			testMpEmail.addPart("test","test");
-			
-			
 			MimeMultipart mimeMultipart = new MimeMultipart();
 			BodyPart bodyPart = new MimeBodyPart();
 			bodyPart.setText("Test body message");
