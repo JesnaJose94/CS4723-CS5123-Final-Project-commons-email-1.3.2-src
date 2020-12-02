@@ -1,1 +1,3 @@
-echo "lgy396"
+echo "########"
+echo "\nlgy396\n"
+echo "########"
